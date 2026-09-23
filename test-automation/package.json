@@ -1,0 +1,32 @@
+{
+  "name": "declinefund-test-browser-uat",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:clean-preview": "node build-clean-test-preview.cjs",
+    "test:all:read-only": "node suite.mjs --mode read-only",
+    "test:all:mutate": "node suite.mjs --mode mutate",
+    "test:read": "node runner.mjs --mode read-only --scenario smoke --headed",
+    "test:accounts": "node runner.mjs --mode read-only --scenario account-matrix --headed",
+    "test:coverage": "node runner.mjs --mode read-only --scenario coverage --headed",
+    "test:coverage:retry": "node runner.mjs --mode read-only --scenario coverage-retry --headed",
+    "test:core": "node runner.mjs --mode mutate --scenario core --headed --confirm-test-write",
+    "test:core:headless": "node runner.mjs --mode mutate --scenario core --confirm-test-write",
+    "test:existing-transfer": "node runner.mjs --mode mutate --scenario existing-transfer --headed --confirm-test-write",
+    "test:split-funding-first": "node runner.mjs --mode mutate --scenario split-funding-first --headed --confirm-test-write",
+    "test:rejection-resubmit": "node runner.mjs --mode mutate --scenario rejection-resubmit --headed --confirm-test-write",
+    "test:project-metadata": "node runner.mjs --mode mutate --scenario project-metadata --headed --confirm-test-write",
+    "test:small-category-lifecycle": "node runner.mjs --mode mutate --scenario small-category-lifecycle --headed --confirm-test-write",
+    "test:native-execution": "node runner.mjs --mode mutate --scenario native-execution --headed --confirm-test-write",
+    "test:regression": "node runner.mjs --mode read-only --scenario regression --headed",
+    "test:validation": "node runner.mjs --mode read-only --scenario validation --headed",
+    "test:visible-regression": "node runner.mjs --mode read-only --scenario visible-regression --headed"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
+    "dotenv": "^16.6.1",
+    "pg": "^8.16.3",
+    "playwright": "1.55.0"
+  }
+}

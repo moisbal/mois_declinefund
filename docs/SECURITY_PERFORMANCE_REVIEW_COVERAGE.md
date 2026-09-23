@@ -1,0 +1,476 @@
+# 점검 파일 완결성 및 재현 범위
+
+기준일: 2026-09-23. 현재 소스를 가명처리한 검토용 사본이다. 로컬 원본과 기능 구현은 그대로 보존한다. 이 문서의 목록 이후 추가한 안내 문서 자체는 아래 원본 파일 목록에 포함하지 않는다.
+
+## 포함 확인
+
+| 구분 | 파일 수 |
+|---|---:|
+| (root) | 14 |
+| app | 28 |
+| components | 42 |
+| db | 3 |
+| docs | 4 |
+| lib | 35 |
+| scripts | 83 |
+| supabase | 64 |
+| test-automation | 8 |
+| tests | 33 |
+| types | 1 |
+
+- 실행 소스 app/components/lib/types 누락: 0개. 상대경로 import 누락: 0개. npm scripts의 코드 경로 누락: 0개. 소스 구문 분석 오류: 0개.
+- db/supabase SQL 65개를 포함한다. 원본과 비교하여 CREATE TABLE/FUNCTION/TRIGGER/POLICY/INDEX/VIEW, ALTER TABLE, GRANT/REVOKE 정의의 삭제는 없다. TEST/PROD 대상 판별에 쓰는 프로젝트 참조 리터럴만 일부 가명처리했다.
+- 실제 업무자료를 포함한 data 7개와 실행 산출물은 제외했다. 계정 생성·감사·인증 시험 코드 5개는 제거하지 않고 가명처리하여 복원했다.
+- TypeScript noEmit 검사 통과. 계정 별칭 단위검사 3/3 통과. 전체 기존 단위검사 237/239 통과, 기존 실패 2개 유지. 전체 빌드·DB UAT·부하 테스트는 이번 전달 준비에서 실행하지 않았다.
+- 의존성 설치는 기존 잠금 파일과 로컬 설치 모듈을 이용한 타입/단위 검증 범위다. 외부의 완전히 새로운 운영체제에서 npm ci 및 빌드까지 검증한 것은 아니다.
+
+## 가명처리의 영향
+
+함수·권한 체크·트랜잭션 처리·조회식을 삭제하거나 최적화하지 않았다. 실제 이메일/별칭/프로젝트 참조, 하드코딩 비밀번호와 기존 시험 거래 UUID/금액을 가상의 값으로 치환했다. 예시 이메일 도메인은 example.invalid이고, 문자열 값과 타입 및 사용 관계를 유지했다. 아래 파일은 현장 설정값과 다르므로 실제 DB와 대조할 때 이 차이를 고려한다.
+
+- `docs/SECURITY_PERFORMANCE_REVIEW.md`
+- `lib/analytics/queries.ts`
+- `lib/testLoginAliases.ts`
+- `scripts/apply-generic-budget-adjustment-test.cjs`
+- `scripts/audit-admin-funding-approval-test.cjs`
+- `scripts/audit-budget-adjustment-duplicate-test.cjs`
+- `scripts/audit-budget-adjustment-final-test.cjs`
+- `scripts/audit-budget-change-source-readiness-test.cjs`
+- `scripts/audit-budget-change-workflow-test.cjs`
+- `scripts/audit-budget-display-won-test.cjs`
+- `scripts/audit-multi-destination-regression-test.cjs`
+- `scripts/audit-my-projects-workspace-test.cjs`
+- `scripts/audit-new-project-funding-source-test.cjs`
+- `scripts/audit-sunchang-budget-adjustment-test.cjs`
+- `scripts/audit-test-account-ui-coverage.cjs`
+- `scripts/audit-test-login-aliases.mjs`
+- `scripts/audit-test-project-identifiers.cjs`
+- `scripts/audit-test-screen-loads.cjs`
+- `scripts/audit-test-visible-english.cjs`
+- `scripts/backup-direct-workflow-test.cjs`
+- `scripts/backup-new-project-soft-delete-test.cjs`
+- `scripts/build-test-env.bat`
+- `scripts/create_test_users.cjs`
+- `scripts/create_test_users_local.cjs`
+- `scripts/diagnose-dashboard-summary-test.cjs`
+- `scripts/recover-project-change-uat-fixture.cjs`
+- `scripts/run-admin-budget-workflow-test-hotfix.cjs`
+- `scripts/run-admin-budget-workflow-uat.cjs`
+- `scripts/run-admin-funding-approval-ia-uat.cjs`
+- `scripts/run-budget-adjustment-draft-upsert-uat.cjs`
+- `scripts/run-budget-adjustment-idempotency-uat.cjs`
+- `scripts/run-budget-change-apply-test-hotfix.cjs`
+- `scripts/run-budget-change-approved-rejection-test-hotfix.cjs`
+- `scripts/run-budget-change-auto-apply-test-migration.cjs`
+- `scripts/run-budget-change-auto-apply-uat.cjs`
+- `scripts/run-budget-change-candidate-test-hotfix.cjs`
+- `scripts/run-budget-change-conservation-test-hotfix.cjs`
+- `scripts/run-budget-change-correction-hotfix-test-migration.cjs`
+- `scripts/run-budget-change-max-decrease-test-migration.cjs`
+- `scripts/run-budget-change-position-test-hotfix.cjs`
+- `scripts/run-budget-change-test-migration.cjs`
+- `scripts/run-budget-change-workflow-uat.cjs`
+- `scripts/run-budget-change-year-search-test-hotfix.cjs`
+- `scripts/run-direct-grouped-trace-hotfix-test-migration.cjs`
+- `scripts/run-direct-validation-hotfix-test.cjs`
+- `scripts/run-direct-workflow-test-migration.cjs`
+- `scripts/run-direct-workflow-uat.cjs`
+- `scripts/run-execution-status-reason-test-migration.cjs`
+- `scripts/run-execution-status-reason-uat.cjs`
+- `scripts/run-generic-budget-adjustment-generality-uat.cjs`
+- `scripts/run-multi-destination-budget-change-test-migration.cjs`
+- `scripts/run-multi-destination-budget-change-uat.cjs`
+- `scripts/run-new-project-delete-origin-hotfix-test-migration.cjs`
+- `scripts/run-new-project-funding-workflow-test-migration.cjs`
+- `scripts/run-new-project-funding-workflow-uat.cjs`
+- `scripts/run-new-project-pending-path-test-migration.cjs`
+- `scripts/run-new-project-soft-delete-schema-reload-test-migration.cjs`
+- `scripts/run-new-project-soft-delete-test-migration.cjs`
+- `scripts/run-new-project-soft-delete-uat.cjs`
+- `scripts/run-pending-fund-snapshot-test-migration.cjs`
+- `scripts/run-pre-user-uat.cjs`
+- `scripts/run-project-change-management-test-hotfix.cjs`
+- `scripts/run-project-change-management-test-migration.cjs`
+- `scripts/run-project-change-management-uat.cjs`
+- `scripts/run-project-delay-reason-test-migration.cjs`
+- `scripts/run-sunchang-mixed-budget-adjustment-uat.cjs`
+- `scripts/run-test-uat-bootstrap-migration.cjs`
+- `scripts/run-test-uat-unlinked-budget-change.cjs`
+- `scripts/run-yanggu-budget-change-e2e-uat.cjs`
+- `scripts/sync-test-vercel-service-key.cjs`
+- `scripts/trace-admin-budget-workflow-test.cjs`
+- `scripts/trace-generic-budget-generality-test.cjs`
+- `scripts/trace-yanggu-budget-change-e2e-test.cjs`
+- `scripts/verify-budget-change-preview.cjs`
+- `scripts/verify-sunchang-budget-preview.cjs`
+- `supabase/README.md`
+- `supabase/migrations/20260826000100_project_change_management_delta.sql`
+- `supabase/migrations/20260826000200_project_change_management_rpc_hotfix.sql`
+- `supabase/migrations/20260826000300_project_change_management_rpc_id_hotfix.sql`
+- `supabase/migrations/20260826000400_project_change_management_rpc_return_hotfix.sql`
+- `supabase/migrations/20260826000500_project_similarity_return_hotfix.sql`
+- `supabase/migrations/20260826000600_budget_change_workflow_delta.sql`
+- `supabase/migrations/20260826000700_budget_change_position_hotfix.sql`
+- `supabase/migrations/20260826000800_budget_change_candidate_hotfix.sql`
+- `supabase/migrations/20260826000900_budget_change_apply_hotfix.sql`
+- `supabase/migrations/20260827000100_budget_change_conservation_rules_hotfix.sql`
+- `supabase/migrations/20260827000200_budget_change_year_search_and_increase_source.sql`
+- `supabase/migrations/20260827000300_test_uat_on_demand_budget_bootstrap.sql`
+- `supabase/migrations/20260827000400_budget_change_approved_rejection_test_hotfix.sql`
+- `supabase/migrations/20260827000500_admin_budget_workflow_uat_hotfix.sql`
+- `supabase/migrations/20260827000600_budget_change_max_decrease_and_same_year_guard.sql`
+- `supabase/migrations/20260829000100_generic_budget_adjustment_engine.sql`
+- `supabase/migrations/20260831000100_generic_budget_adjustment_trace_hotfix.sql`
+- `supabase/migrations/20260831000200_generic_budget_adjustment_ambiguity_hotfix.sql`
+- `supabase/migrations/20260831000300_generic_budget_adjustment_canonical_decrease_hotfix.sql`
+- `supabase/migrations/20260831000400_budget_adjustment_idempotency_state_machine_hotfix.sql`
+- `supabase/migrations/20260831000500_budget_adjustment_insert_defaults_hotfix.sql`
+- `supabase/migrations/20260831000600_budget_adjustment_draft_upsert.sql`
+- `supabase/migrations/20260903000100_new_project_funding_source_workflow.sql`
+- `supabase/migrations/20260903000200_new_project_pending_fund_path.sql`
+- `supabase/migrations/20260903000300_pending_fund_snapshot_trigger.sql`
+- `supabase/migrations/20260903000400_pending_fund_business_year.sql`
+- `supabase/migrations/20260903000500_project_delay_reason.sql`
+- `supabase/migrations/20260903000600_execution_status_reason.sql`
+- `supabase/migrations/20260907000100_multi_destination_budget_change.sql`
+- `supabase/migrations/20260914000500_new_project_soft_delete.sql`
+- `supabase/migrations/20260914000600_new_project_delete_origin_history_hotfix.sql`
+- `test-automation/README.md`
+- `test-automation/build-clean-test-preview.cjs`
+- `test-automation/runner.mjs`
+- `test-automation/start-clean-test-preview.cjs`
+- `tests/unit/budgetAdjustmentIdempotencyContract.test.ts`
+- `tests/unit/budgetChangeWorkflowContract.test.ts`
+- `tests/unit/multiDestinationBudgetChangeContract.test.ts`
+- `tests/unit/newProjectFundingWorkflowContract.test.ts`
+- `tests/unit/projectChangeManagementContract.test.ts`
+- `tests/unit/testLoginAliases.test.ts`
+
+## 별도 인수가 필요한 자료
+
+| 점검 | GitHub만으로 가능한 범위 | 추가로 필요한 자료 |
+|---|---|---|
+| 인증·권한 | 브라우저/서버 토큰 처리, 역할·지역 검사와 DB RLS 정의 | TEST 계정, 실제 grants/policies/functions 메타데이터 |
+| DB 구조 | 저장된 SQL 65개, 테이블/인덱스/함수/트리거/RLS 정의의 검토 | TEST DB 적용 스키마 및 마이그레이션 적용 목록과의 대조 |
+| 업무 처리 | 현재 소스의 직접처리·사후확인 흐름과 정적 계약 검사 | 격리된 TEST fixture, 계정별 실행 검증 |
+| 성능 | 쿼리/집계/페이지 처리/캐시 구현 분석 | TEST 데이터 규모, 실행계획, 가린 로그, 실제 응답시간 측정 |
+
+db/schema.sql과 supabase/schema.sql은 과거 구조가 다르고, 마이그레이션은 여러 시점의 TEST 보완을 포함한다. 따라서 이 SQL 파일들을 순서대로 실행하면 현재 TEST DB가 완전히 복원된다고 보장하지 않는다. 실제 적용 스키마와의 동일성은 미확인이다. 특정 실행 기록을 조회하는 감사/UAT 스크립트도 예시 UUID의 fixture를 준비해야 한다. 이러한 한계는 누락된 실행 코드를 숨긴 것이 아니라 코드 전달과 실제 환경 검증의 범위를 구분한 것이다.
+
+## 원본에서 선별한 파일 목록
+
+- `.env.demo.example`
+- `.env.example`
+- `.env.review.example`
+- `.eslintrc.json`
+- `.gitignore`
+- `.vercelignore`
+- `README.md`
+- `README_DEMO_MODE.md`
+- `app/admin/funding/page.tsx`
+- `app/admin/ledger-cutover/actions.ts`
+- `app/admin/ledger-cutover/page.tsx`
+- `app/admin/page.tsx`
+- `app/admin/project-changes/page.tsx`
+- `app/admin/small-category-proposals/page.tsx`
+- `app/analytics/page.tsx`
+- `app/api/admin/generate-accounts/route.ts`
+- `app/api/admin/project-changes/export/route.ts`
+- `app/api/analytics/route.ts`
+- `app/api/projects/summary/route.ts`
+- `app/confirmations/actions.ts`
+- `app/confirmations/page.tsx`
+- `app/dashboard/page.tsx`
+- `app/demo/analytics/page.tsx`
+- `app/demo/layout.tsx`
+- `app/demo/page.tsx`
+- `app/globals.css`
+- `app/layout.tsx`
+- `app/login/page.tsx`
+- `app/my-projects/[id]/edit/page.tsx`
+- `app/my-projects/budget-change-actions.ts`
+- `app/my-projects/financial-actions.ts`
+- `app/my-projects/funding-actions.ts`
+- `app/my-projects/page.tsx`
+- `app/my-projects/workspace-actions.ts`
+- `app/page.tsx`
+- `app/password-reset/page.tsx`
+- `components/admin/AdminShell.tsx`
+- `components/admin/CustomSmallCategoryReviewPanel.tsx`
+- `components/admin/FundingManagementShell.tsx`
+- `components/admin/LedgerCutoverShell.tsx`
+- `components/admin/ProjectChangeManagementShell.tsx`
+- `components/admin/ProjectReviewDetailPanel.tsx`
+- `components/admin/SmallCategoryProposalManagementShell.tsx`
+- `components/analytics/AnalyticsShell.tsx`
+- `components/analytics/FundingAnalyticsPanel.tsx`
+- `components/common/Header.tsx`
+- `components/common/LoginForm.tsx`
+- `components/common/RightSidebarNavigation.tsx`
+- `components/common/WorkUi.tsx`
+- `components/confirmations/ConfirmationCenterShell.tsx`
+- `components/dashboard/ChangeLogPanel.tsx`
+- `components/dashboard/DashboardShell.tsx`
+- `components/dashboard/OverviewPanel.tsx`
+- `components/dashboard/ProjectClassificationEditor.tsx`
+- `components/dashboard/ProjectTable.tsx`
+- `components/demo/DemoDashboard.tsx`
+- `components/demo/DemoNavigation.tsx`
+- `components/my-projects/MyProjectEditShell.tsx`
+- `components/my-projects/MyProjectsOverview.tsx`
+- `components/my-projects/MyProjectsShell.tsx`
+- `components/my-projects/MyProjectsWorkspace.module.css`
+- `components/my-projects/MyProjectsWorkspace.tsx`
+- `components/my-projects/NewProjectDeleteDialog.tsx`
+- `components/my-projects/NewProjectRequestFields.tsx`
+- `components/my-projects/NewProjectRequestPanel.tsx`
+- `components/my-projects/ProjectBasicInfoSection.tsx`
+- `components/my-projects/ProjectBudgetSection.tsx`
+- `components/my-projects/ProjectBusinessTypeOptions.tsx`
+- `components/my-projects/ProjectBusinessTypeSection.tsx`
+- `components/my-projects/ProjectChangeHistoryPanel.tsx`
+- `components/my-projects/ProjectClassificationSection.tsx`
+- `components/my-projects/ProjectExecutionStatusFields.tsx`
+- `components/my-projects/ProjectFinancialLedgerSection.tsx`
+- `components/my-projects/ProjectFundingManagementSection.tsx`
+- `components/my-projects/ProjectLifecycleOptions.tsx`
+- `components/my-projects/ProjectRelatedProjectsSection.tsx`
+- `components/my-projects/SimilarProjectDialog.tsx`
+- `components/my-projects/SmallCategoryProposalStatusList.tsx`
+- `db/rls.sql`
+- `db/schema.sql`
+- `db/seed.sql`
+- `docs/SECURITY_PERFORMANCE_REVIEW.md`
+- `docs/SECURITY_PERFORMANCE_REVIEW_STATUS.md`
+- `docs/ledger-policy-delta.md`
+- `docs/project-name-presentation-regression-20260922.md`
+- `lib/amountFormat.ts`
+- `lib/analytics/calculations.ts`
+- `lib/analytics/filters.ts`
+- `lib/analytics/queries.ts`
+- `lib/analytics/regions.ts`
+- `lib/analytics/sourcePolicy.ts`
+- `lib/analytics/types.ts`
+- `lib/appNavigation.ts`
+- `lib/auditLogFormat.ts`
+- `lib/auth.ts`
+- `lib/budgetChanges.ts`
+- `lib/customSmallCategories.ts`
+- `lib/demo-mode.ts`
+- `lib/demo/data.ts`
+- `lib/financialLedger.ts`
+- `lib/fundingAnalytics.ts`
+- `lib/fundingManagement.ts`
+- `lib/ledgerRuntime.ts`
+- `lib/myProjectEdit.ts`
+- `lib/myProjects.ts`
+- `lib/myProjectsWorkspace.ts`
+- `lib/pagination.ts`
+- `lib/password.ts`
+- `lib/postChecks.ts`
+- `lib/postgrest.ts`
+- `lib/presentationLabels.ts`
+- `lib/projectChange.ts`
+- `lib/projectChanges.ts`
+- `lib/projectClassification.ts`
+- `lib/projectReview.ts`
+- `lib/projectReviewCore.ts`
+- `lib/projects.ts`
+- `lib/supabaseAdmin.ts`
+- `lib/supabaseClient.ts`
+- `lib/testLoginAliases.ts`
+- `middleware.ts`
+- `next-env.d.ts`
+- `next.config.mjs`
+- `package-lock.json`
+- `package.json`
+- `scripts/apply-generic-budget-adjustment-test.cjs`
+- `scripts/audit-admin-funding-approval-test.cjs`
+- `scripts/audit-budget-adjustment-duplicate-test.cjs`
+- `scripts/audit-budget-adjustment-final-test.cjs`
+- `scripts/audit-budget-change-source-readiness-test.cjs` — 가명처리하여 복원
+- `scripts/audit-budget-change-workflow-test.cjs`
+- `scripts/audit-budget-display-won-test.cjs`
+- `scripts/audit-funding-reallocation-test.cjs`
+- `scripts/audit-multi-destination-regression-test.cjs`
+- `scripts/audit-my-projects-workspace-test.cjs`
+- `scripts/audit-new-project-funding-source-test.cjs`
+- `scripts/audit-sunchang-budget-adjustment-test.cjs`
+- `scripts/audit-test-account-ui-coverage.cjs`
+- `scripts/audit-test-login-aliases.mjs`
+- `scripts/audit-test-project-identifiers.cjs`
+- `scripts/audit-test-screen-loads.cjs`
+- `scripts/audit-test-visible-english.cjs`
+- `scripts/backup-direct-workflow-test.cjs`
+- `scripts/backup-new-project-soft-delete-test.cjs`
+- `scripts/build-test-env.bat`
+- `scripts/create_test_users.cjs` — 가명처리하여 복원
+- `scripts/create_test_users_local.cjs` — 가명처리하여 복원
+- `scripts/diagnose-dashboard-summary-test.cjs`
+- `scripts/extract_fund_data.cjs`
+- `scripts/generate_region_mapping.cjs`
+- `scripts/import_projects.cjs`
+- `scripts/import_regions.cjs`
+- `scripts/reconcile_projects.cjs`
+- `scripts/recover-project-change-uat-fixture.cjs`
+- `scripts/run-admin-budget-workflow-test-hotfix.cjs`
+- `scripts/run-admin-budget-workflow-uat.cjs`
+- `scripts/run-admin-funding-approval-ia-uat.cjs`
+- `scripts/run-budget-adjustment-draft-upsert-uat.cjs`
+- `scripts/run-budget-adjustment-idempotency-uat.cjs`
+- `scripts/run-budget-change-apply-test-hotfix.cjs`
+- `scripts/run-budget-change-approved-rejection-test-hotfix.cjs`
+- `scripts/run-budget-change-auto-apply-test-migration.cjs`
+- `scripts/run-budget-change-auto-apply-uat.cjs`
+- `scripts/run-budget-change-candidate-test-hotfix.cjs`
+- `scripts/run-budget-change-conservation-test-hotfix.cjs`
+- `scripts/run-budget-change-correction-hotfix-test-migration.cjs`
+- `scripts/run-budget-change-max-decrease-test-migration.cjs`
+- `scripts/run-budget-change-position-test-hotfix.cjs`
+- `scripts/run-budget-change-test-migration.cjs`
+- `scripts/run-budget-change-workflow-uat.cjs`
+- `scripts/run-budget-change-year-search-test-hotfix.cjs`
+- `scripts/run-direct-grouped-trace-hotfix-test-migration.cjs`
+- `scripts/run-direct-validation-hotfix-test.cjs`
+- `scripts/run-direct-workflow-test-migration.cjs`
+- `scripts/run-direct-workflow-uat.cjs`
+- `scripts/run-execution-status-reason-test-migration.cjs`
+- `scripts/run-execution-status-reason-uat.cjs`
+- `scripts/run-funding-reallocation-test-migration.cjs`
+- `scripts/run-funding-reallocation-uat-hotfix.cjs`
+- `scripts/run-funding-reallocation-uat.cjs`
+- `scripts/run-generic-budget-adjustment-generality-uat.cjs`
+- `scripts/run-multi-destination-budget-change-test-migration.cjs`
+- `scripts/run-multi-destination-budget-change-uat.cjs`
+- `scripts/run-new-project-delete-origin-hotfix-test-migration.cjs`
+- `scripts/run-new-project-funding-workflow-test-migration.cjs`
+- `scripts/run-new-project-funding-workflow-uat.cjs`
+- `scripts/run-new-project-pending-path-test-migration.cjs`
+- `scripts/run-new-project-soft-delete-schema-reload-test-migration.cjs`
+- `scripts/run-new-project-soft-delete-test-migration.cjs`
+- `scripts/run-new-project-soft-delete-uat.cjs`
+- `scripts/run-pending-fund-snapshot-test-migration.cjs`
+- `scripts/run-pre-user-uat.cjs`
+- `scripts/run-project-change-management-test-hotfix.cjs`
+- `scripts/run-project-change-management-test-migration.cjs`
+- `scripts/run-project-change-management-uat.cjs`
+- `scripts/run-project-delay-reason-test-migration.cjs`
+- `scripts/run-sunchang-mixed-budget-adjustment-uat.cjs`
+- `scripts/run-test-uat-bootstrap-migration.cjs`
+- `scripts/run-test-uat-unlinked-budget-change.cjs`
+- `scripts/run-yanggu-budget-change-e2e-uat.cjs`
+- `scripts/seed.cjs`
+- `scripts/sync-test-vercel-service-key.cjs`
+- `scripts/trace-admin-budget-workflow-test.cjs`
+- `scripts/trace-generic-budget-generality-test.cjs`
+- `scripts/trace-yanggu-budget-change-e2e-test.cjs`
+- `scripts/verify-budget-change-preview.cjs`
+- `scripts/verify-ledger-test-target.cjs`
+- `scripts/verify-sunchang-budget-preview.cjs`
+- `supabase/20260806_10_align_audit_logs_schema.sql`
+- `supabase/20260806_12_prepare_real_data_schema.sql`
+- `supabase/20260818_13_add_project_classification.sql`
+- `supabase/20260818_14_expand_project_classification_master.sql`
+- `supabase/20260818_15_add_custom_small_category_workflow.sql`
+- `supabase/20260818_16_add_my_projects_editing.sql`
+- `supabase/20260818_17_optimize_dashboard_filter_options.sql`
+- `supabase/20260819_18_add_financial_ledger.sql`
+- `supabase/20260819_19_add_legacy_baseline_cutover.sql`
+- `supabase/README.md` — 가명처리하여 복원
+- `supabase/README_financial_ledger_preflight.md`
+- `supabase/drafts/update_project_exec_with_audit.sql`
+- `supabase/drafts/update_project_exec_with_audit_rollback.sql`
+- `supabase/drafts/update_project_exec_with_audit_verification.sql`
+- `supabase/migrations/20260820000100_ledger_runtime_lineage_hardening.sql`
+- `supabase/migrations/20260821000100_ledger_policy_delta.sql`
+- `supabase/migrations/20260824000100_funding_reallocation_delta.sql`
+- `supabase/migrations/20260824000200_funding_reallocation_uat_hotfix.sql`
+- `supabase/migrations/20260824000300_funding_analytics_region_label_uat_hotfix.sql`
+- `supabase/migrations/20260826000100_project_change_management_delta.sql`
+- `supabase/migrations/20260826000200_project_change_management_rpc_hotfix.sql`
+- `supabase/migrations/20260826000300_project_change_management_rpc_id_hotfix.sql`
+- `supabase/migrations/20260826000400_project_change_management_rpc_return_hotfix.sql`
+- `supabase/migrations/20260826000500_project_similarity_return_hotfix.sql`
+- `supabase/migrations/20260826000600_budget_change_workflow_delta.sql`
+- `supabase/migrations/20260826000700_budget_change_position_hotfix.sql`
+- `supabase/migrations/20260826000800_budget_change_candidate_hotfix.sql`
+- `supabase/migrations/20260826000900_budget_change_apply_hotfix.sql`
+- `supabase/migrations/20260827000100_budget_change_conservation_rules_hotfix.sql`
+- `supabase/migrations/20260827000200_budget_change_year_search_and_increase_source.sql`
+- `supabase/migrations/20260827000300_test_uat_on_demand_budget_bootstrap.sql`
+- `supabase/migrations/20260827000400_budget_change_approved_rejection_test_hotfix.sql`
+- `supabase/migrations/20260827000500_admin_budget_workflow_uat_hotfix.sql`
+- `supabase/migrations/20260827000600_budget_change_max_decrease_and_same_year_guard.sql`
+- `supabase/migrations/20260829000100_generic_budget_adjustment_engine.sql`
+- `supabase/migrations/20260831000100_generic_budget_adjustment_trace_hotfix.sql`
+- `supabase/migrations/20260831000200_generic_budget_adjustment_ambiguity_hotfix.sql`
+- `supabase/migrations/20260831000300_generic_budget_adjustment_canonical_decrease_hotfix.sql`
+- `supabase/migrations/20260831000400_budget_adjustment_idempotency_state_machine_hotfix.sql`
+- `supabase/migrations/20260831000500_budget_adjustment_insert_defaults_hotfix.sql`
+- `supabase/migrations/20260831000600_budget_adjustment_draft_upsert.sql`
+- `supabase/migrations/20260903000100_new_project_funding_source_workflow.sql`
+- `supabase/migrations/20260903000200_new_project_pending_fund_path.sql`
+- `supabase/migrations/20260903000300_pending_fund_snapshot_trigger.sql`
+- `supabase/migrations/20260903000400_pending_fund_business_year.sql`
+- `supabase/migrations/20260903000500_project_delay_reason.sql`
+- `supabase/migrations/20260903000600_execution_status_reason.sql`
+- `supabase/migrations/20260907000100_multi_destination_budget_change.sql`
+- `supabase/migrations/20260911000100_budget_change_auto_apply_and_destination_correction.sql`
+- `supabase/migrations/20260914000100_budget_change_destination_correction_classification_hotfix.sql`
+- `supabase/migrations/20260914000200_direct_new_project_and_post_checks.sql`
+- `supabase/migrations/20260914000300_direct_new_project_existing_validation_hotfix.sql`
+- `supabase/migrations/20260914000400_direct_grouped_destination_trace_hotfix.sql`
+- `supabase/migrations/20260914000500_new_project_soft_delete.sql`
+- `supabase/migrations/20260914000600_new_project_delete_origin_history_hotfix.sql`
+- `supabase/migrations/20260914000700_new_project_soft_delete_schema_reload.sql`
+- `supabase/migrations/20260915000100_execution_reversal_origin_and_grant.sql`
+- `supabase/migrations/20260915000200_budget_change_draft_soft_delete_compat.sql`
+- `supabase/migrations/20260915000300_budget_change_draft_soft_delete_source_shape.sql`
+- `supabase/preflight_financial_ledger_18.sql`
+- `supabase/preflight_legacy_cutover_19.sql`
+- `supabase/rls.sql`
+- `supabase/schema.sql`
+- `supabase/seed.sql`
+- `test-automation/.gitignore`
+- `test-automation/README.md`
+- `test-automation/build-clean-test-preview.cjs`
+- `test-automation/package-lock.json`
+- `test-automation/package.json`
+- `test-automation/runner.mjs`
+- `test-automation/start-clean-test-preview.cjs`
+- `test-automation/suite.mjs`
+- `tests/unit/analyticsConsistency.test.ts`
+- `tests/unit/analyticsKoreanPresentation.test.ts`
+- `tests/unit/analyticsPostgrestChunking.test.ts`
+- `tests/unit/appNavigation.test.ts`
+- `tests/unit/auditLogFormat.test.ts`
+- `tests/unit/budgetAdjustmentIdempotencyContract.test.ts`
+- `tests/unit/budgetChangeAutoApplyCorrectionContract.test.ts`
+- `tests/unit/budgetChangeWorkflowContract.test.ts`
+- `tests/unit/budgetChanges.test.ts`
+- `tests/unit/directWorkflowPostCheckContract.test.ts`
+- `tests/unit/financialLedger.test.ts`
+- `tests/unit/fundingAnalytics.test.ts`
+- `tests/unit/fundingManagement.test.ts`
+- `tests/unit/fundingReallocationDeltaContract.test.ts`
+- `tests/unit/ledgerMigrationContract.test.ts`
+- `tests/unit/ledgerPolicyDeltaContract.test.ts`
+- `tests/unit/ledgerRuntime.test.ts`
+- `tests/unit/multiDestinationBudgetChangeContract.test.ts`
+- `tests/unit/myProjectEdit.test.ts`
+- `tests/unit/myProjectsWorkspace.test.ts`
+- `tests/unit/newProjectFundingWorkflowContract.test.ts`
+- `tests/unit/newProjectSoftDeleteUiContract.test.ts`
+- `tests/unit/pagination.test.ts`
+- `tests/unit/passwordChangeContract.test.ts`
+- `tests/unit/projectChange.test.ts`
+- `tests/unit/projectChangeManagementContract.test.ts`
+- `tests/unit/projectEditUiContract.test.ts`
+- `tests/unit/projectPresentationContract.test.ts`
+- `tests/unit/projectReview.test.ts`
+- `tests/unit/supabaseAdminCacheContract.test.ts`
+- `tests/unit/testLoginAliases.test.ts` — 가명처리하여 복원
+- `tests/unit/testWorkflowRegressionContract.test.ts`
+- `tests/unit/visiblePresentationRegression.test.ts`
+- `tsconfig.json`
+- `types/supabase.ts`

@@ -1,0 +1,51 @@
+node_modules
+.next
+out
+.env
+.env.local
+.env.admin
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+.vercel
+supabase/.temp/
+*.log
+tsconfig.tsbuildinfo
+graphify-out/
+
+.env*
+!.env.example
+!.env.demo.example
+!.env.review.example
+
+# Local review tooling and reproducible/generated output (keep on disk).
+/.codex-tmp/
+/test-results/
+/artifacts/
+/exports/
+/reports/
+**/playwright-report/
+**/blob-report/
+**/coverage/
+**/.cache/
+**/storage-state*.json
+**/storageState*.json
+**/auth-state*.json
+**/cookies*.json
+*.tsbuildinfo
+
+# Inspected business extracts and reconciliation output; not runtime inputs.
+/data/source_dashboard.html
+/data/fund_projects_raw.json
+/data/fund_data_validation.json
+/data/project_reconciliation.json
+/data/missing_projects.json
+/data/region_mapping_validation.json
+/data/real_data_schema_analysis.md
+
+# Legacy account provisioning material; contains literal account/password data.
+
+# Operational rollout evidence contains actual transaction identifiers/amounts.
+/docs/direct-workflow-rollout-rollback-20260914.md

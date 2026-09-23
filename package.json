@@ -1,0 +1,41 @@
+{
+  "name": "declinefund-magnt",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "prebuild": "npm run test:presentation",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test:presentation": "node --test --experimental-strip-types tests/unit/projectPresentationContract.test.ts tests/unit/visiblePresentationRegression.test.ts",
+    "test:unit": "node --test --experimental-strip-types tests/unit/financialLedger.test.ts tests/unit/ledgerRuntime.test.ts tests/unit/ledgerMigrationContract.test.ts tests/unit/ledgerPolicyDeltaContract.test.ts tests/unit/passwordChangeContract.test.ts tests/unit/auditLogFormat.test.ts tests/unit/projectReview.test.ts tests/unit/projectChange.test.ts tests/unit/projectChangeManagementContract.test.ts tests/unit/projectEditUiContract.test.ts tests/unit/myProjectEdit.test.ts tests/unit/analyticsConsistency.test.ts tests/unit/fundingAnalytics.test.ts tests/unit/fundingManagement.test.ts tests/unit/fundingReallocationDeltaContract.test.ts tests/unit/budgetChanges.test.ts tests/unit/budgetChangeWorkflowContract.test.ts tests/unit/budgetAdjustmentIdempotencyContract.test.ts tests/unit/budgetChangeAutoApplyCorrectionContract.test.ts tests/unit/newProjectFundingWorkflowContract.test.ts tests/unit/directWorkflowPostCheckContract.test.ts tests/unit/multiDestinationBudgetChangeContract.test.ts tests/unit/projectPresentationContract.test.ts tests/unit/visiblePresentationRegression.test.ts tests/unit/appNavigation.test.ts tests/unit/pagination.test.ts tests/unit/supabaseAdminCacheContract.test.ts tests/unit/newProjectSoftDeleteUiContract.test.ts",
+    "seed": "node scripts/seed.cjs",
+    "create-test-users": "node scripts/create_test_users.cjs",
+    "create-test-users-local": "node scripts/create_test_users_local.cjs",
+    "extract:data": "node scripts/extract_fund_data.cjs",
+    "import:regions": "node scripts/import_regions.cjs",
+    "import:projects:test": "node scripts/import_projects.cjs --limit=10",
+    "import:projects:all": "node scripts/import_projects.cjs --all",
+    "audit:test-screen-loads": "node scripts/audit-test-screen-loads.cjs .env.ledger-test.local .env.ledger-uat-credentials.local https://declinefund-test.vercel.app",
+    "migrate:test-project-delay-reason": "node scripts/run-project-delay-reason-test-migration.cjs --env-file .env.ledger-test.local",
+    "migrate:test-execution-status-reason": "node scripts/run-execution-status-reason-test-migration.cjs --env-file .env.ledger-test.local"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
+    "exceljs": "^4.4.0",
+    "next": "^14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "dotenv": "^16.6.1",
+    "eslint": "8.57.1",
+    "eslint-config-next": "14.2.35",
+    "pg": "^8.16.3",
+    "typescript": "^5.6.3"
+  }
+}
